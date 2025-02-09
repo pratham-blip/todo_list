@@ -1,3 +1,9 @@
 service : {
-    "greet": (text) -> (text) query;
+    add_task: (text, text, bool) -> (nat64);
+    get_tasks: () -> (vec record { nat64; text; text; bool; bool });
+    get_important_tasks: () -> (vec record { nat64; text; text; bool; bool });
+    get_completed_tasks: () -> (vec record { nat64; text; text; bool; bool });
+    toggle_task: (nat64) -> ();
+    mark_important: (nat64) -> ();
+    delete_task: (nat64) -> ();
 }
