@@ -8,38 +8,55 @@ use serde::{Serialize, Deserialize};
 struct Task {
     id: u64,
     title: String,
-    category: String, // "Personal", "Work", etc.
+    category: String, // Example: "Personal", "Work", etc.
     important: bool,
     completed: bool,
 }
 
-thread_local! {
+thread_local! {        
     static TASKS: RefCell<Vec<Task>> = RefCell::default();
 }
 
 #[update]
-fn add_task(title: String, category: String, important: bool) -> u64 {
+fn add_task(title: String, category: String, important: bool) -> u64 {      
     TASKS.with(|tasks| {
         let mut tasks = tasks.borrow_mut();
-        let id = tasks.len() as u64 + 1;
+        let id = (tasks.len() as u64) + 1;
         tasks.push(Task { id, title, category, important, completed: false });
         id
     })
 }
 
 #[query]
-fn get_tasks() -> Vec<Task> {
-    TASKS.with(|tasks| tasks.borrow().clone())
+fn get_tasks() -> Vec<(u64, String, String, bool, bool)> {   
+    TASKS.with(|tasks| {
+        tasks.borrow()
+            .iter()
+            .map(|task| (task.id, task.title.clone(), task.category.clone(), task.completed, task.important)) 
+            .collect()
+    })
 }
 
 #[query]
 fn get_important_tasks() -> Vec<Task> {
-    TASKS.with(|tasks| tasks.borrow().iter().filter(|t| t.important).cloned().collect())
+    TASKS.with(|tasks| {
+        tasks.borrow()
+            .iter()
+            .filter(|t| t.important)
+            .cloned()
+            .collect()
+    })
 }
 
 #[query]
 fn get_completed_tasks() -> Vec<Task> {
-    TASKS.with(|tasks| tasks.borrow().iter().filter(|t| t.completed).cloned().collect())
+    TASKS.with(|tasks| {
+        tasks.borrow()
+            .iter()
+            .filter(|t| t.completed)
+            .cloned()
+            .collect()
+    })
 }
 
 #[update]
