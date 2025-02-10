@@ -1,8 +1,10 @@
-use ic_cdk::storage;
 use ic_cdk_macros::*;
 use std::cell::RefCell;
+use ic_cdk::{query, update};
+use candid::CandidType;
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Debug, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, Default, CandidType, Serialize, Deserialize)]
 struct Task {
     id: u64,
     title: String,
