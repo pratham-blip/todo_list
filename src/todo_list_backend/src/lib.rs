@@ -18,7 +18,7 @@ thread_local! {
 }
 
 #[update]
-fn add_task(title: String, category: String, important: bool) -> u64 {      
+fn add_task(title: String, category: String, important: bool) -> u64 {   // adding tasks to vector     
     TASKS.with(|tasks| {
         let mut tasks = tasks.borrow_mut();
         let id = (tasks.len() as u64) + 1;
@@ -28,7 +28,7 @@ fn add_task(title: String, category: String, important: bool) -> u64 {
 }
 
 #[query]
-fn get_tasks() -> Vec<(u64, String, String, bool, bool)> {   
+fn get_tasks() -> Vec<(u64, String, String, bool, bool)> {     //getting all tasks present in vector
     TASKS.with(|tasks| {
         tasks.borrow()
             .iter()
@@ -38,7 +38,7 @@ fn get_tasks() -> Vec<(u64, String, String, bool, bool)> {
 }
 
 #[query]
-fn get_important_tasks() -> Vec<Task> {
+fn get_important_tasks() -> Vec<Task> { //getter for important tasks
     TASKS.with(|tasks| {
         tasks.borrow()
             .iter()
@@ -49,7 +49,7 @@ fn get_important_tasks() -> Vec<Task> {
 }
 
 #[query]
-fn get_completed_tasks() -> Vec<Task> {
+fn get_completed_tasks() -> Vec<Task> {  //tasks marked as  completed comme via this getter
     TASKS.with(|tasks| {
         tasks.borrow()
             .iter()
@@ -60,7 +60,7 @@ fn get_completed_tasks() -> Vec<Task> {
 }
 
 #[update]
-fn toggle_task(id: u64) {
+fn toggle_task(id: u64) {    //toggling tasks to change it from completed to not completed
     TASKS.with(|tasks| {
         let mut tasks = tasks.borrow_mut();
         if let Some(task) = tasks.iter_mut().find(|task| task.id == id) {
@@ -70,7 +70,7 @@ fn toggle_task(id: u64) {
 }
 
 #[update]
-fn mark_important(id: u64) {
+fn mark_important(id: u64) {  //marking the tasks in array important
     TASKS.with(|tasks| {
         let mut tasks = tasks.borrow_mut();
         if let Some(task) = tasks.iter_mut().find(|task| task.id == id) {
@@ -80,7 +80,7 @@ fn mark_important(id: u64) {
 }
 
 #[update]
-fn delete_task(id: u64) {
+fn delete_task(id: u64) {  //deleting tasks from array/vector
     TASKS.with(|tasks| {
         tasks.borrow_mut().retain(|task| task.id != id);
     })
